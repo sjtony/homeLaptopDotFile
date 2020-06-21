@@ -23,3 +23,7 @@
 !.tel
 !.bits_analog
 !.bits_dump
+!.bash_alias
+!.bashPrompt
+!.bashHistory
+
