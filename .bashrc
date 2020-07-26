@@ -95,6 +95,10 @@ alias l='ls -CF'
 alias gbbb='sudo  ssh -o ConnectTimeout=6 debian@192.168.7.2  || sudo ssh -o ConnectTimeout=6 debian@192.168.6.2'
 
 alias sd='sudo shutdown now'
+alias gs='git status'
+alias gl='git ls-files'
+alias go='git checkout'
+
 
 alias cl='clear'
 # Add an "alert" alias for long running commands.  Use like so:

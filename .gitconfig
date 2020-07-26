@@ -1,22 +1,27 @@
 [user]
 	name = SJTONY
 	email = SHUNJUNHE@gmail.com
-[difftool "bc3"]
-	trustExitCode = true
-[diff]
-	tool = bc3
+#[difftool "bc3"]
+#	trustExitCode = true
+#[diff]
+#	tool = bc3
 
 [alias]
     st = status
-    bc = difftool
-      
-      
-      
+    bc = difftool --dir-diff --no-symlink
+    logg = log --all --graph --oneline --decorate 
+    loggg = log --all --graph --oneline --decorate --simplify-by-decoration 
+     
+    ls = ls-tree -r master --name-only
+    diffdir = difftool -dir-diff -tool=bcompare -no-prompt
     
       
 [diff]
-    tool = bcompare
-[difftool "bcompare"]
+    #tool = bcompare
+    tool = bc3
+#[difftool "bcompare"]
+[difftool "bc3"]
+    trustExitCode = true
     cmd = bcompare \"$LOCAL\" \"$REMOTE\"
       prompt = false
 [merge]
@@ -25,8 +30,6 @@
     cmd = bcompare \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
       keepBackup = false
         trustExitCode = false
-[alias]
-    diffdir = difftool -dir-diff -tool=bcompare -no-prompt
 [push]
 	default = simple
 
