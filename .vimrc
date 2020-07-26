@@ -281,6 +281,19 @@ Plug 'mileszs/ack.vim'
 Plug 'majutsushi/tagbar'
 
 
+
+" Dim paragraphs above and below the active paragraph.
+Plug 'junegunn/limelight.vim'
+"
+" " Distraction free writing by removing UI elements and centering everything.
+Plug 'junegunn/goyo.vim'
+"
+
+
+
+"Plug 'godlygeek/tabular' | Plug 'tpope/vim-markdown'
+"Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
+ 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 "
