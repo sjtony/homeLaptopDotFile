@@ -27,6 +27,9 @@ let g:go_version_warning = 0
 
 
 "================================================================
+" with below setup, no save reqired before saving
+set hidden
+
 " Set compatibility to Vim only.
 set nocompatible
 
@@ -79,6 +82,7 @@ set noshiftround
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 set list!
 
+set nolist
 
 " Display different types of white spaces.
 "set list
@@ -118,32 +122,61 @@ set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ [BUFFE
 " Encoding
 set encoding=utf-8
 
+"set foldmethod=indent
+"set foldmethod=syntax
+set foldlevel=1
+"set foldclose=all
+
+" to check below link for backup swp ...
+"https://medium.com/@Aenon/vim-swap-backup-undo-git-2bf353caa02f
+"set backupdir=~/.vim/backup
+"set directory=~/.vim/swp
+"set undodir=~/.vim/undodir
+
+"cscopequickfix' specifies whether to use quickfix window to show cscope results.
+set cscopequickfix=s-,c-,d-,i-,t-,e-
+set splitbelow
+set splitright
+set foldmethod=manual
+set wrap linebreak 
+set formatoptions+=t 
+
+" MAKE IT EASY TO UPDATE/RELOAD _vimrc
+nmap ,s :source ~/.vimrc
+nmap ,v :e ~/.vimrc
+
 
 " Vim's auto indentation feature does not work properly with text copied from outisde of Vim. Press the <F2> key to toggle paste mode on/off.
 nnoremap <F2> :set invpaste paste?<CR>
 imap <F2> <C-O>:set invpaste paste?<CR>
 set pastetoggle=<F2>
 
-
-
+"map shift + F3 as 'copen'  to open  quickfix list
+"notice it is not working with map <S-F3 > but below one is working
+" <press ctrl-V><press shift+<F3> and generate the code '[1;2R'>
+"map [1;2R :copen<CR>
+map <F3> :vimgrep //g **/*.c<Left><Left><Left><Left><Left><Left><Left><Left><Left>
+nmap <leader><F3> :copen <CR> 
+nnoremap <F4> :buffers<CR>:buffer<Space>
+map <F5> <ESC>yiw<ESC>
+map <F6> <ESC>ciw<C-r>0<ESC>
+map <F7> <ESC>viw"qy<ESC>
 
 " Map the <Space> key to toggle a selected fold opened/closed.
 "nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 "vnoremap <Space> zf
-inoremap <F9> <C-O>za
-nnoremap <F9> za
-onoremap <F9> <C-C>za
-vnoremap <F9> zf
+"inoremap <F7> <C-O>za
+"nnoremap <F7> za
+"onoremap <F7> <C-C>za
+"vnoremap <F7> zf
 
+nmap <F8> :TagbarToggle<CR>
+map <F9> <Nop>
 
-
-
-"map
-"map F3 to toggle line number in normal mode
-"nmap <F3> :set nu! <CR> 
-
-"map <leader>F3 to toggle line relative number in normal mode
-nmap <leader><F3> :set rnu! <CR> 
+" window  tab 
+map <F10> <Esc>:tabnew<CR>
+"map <leader>F12 to toggle line relative number in normal mode
+nmap <leader><F12> :set rnu! <CR> 
 
 
 " List contents of all registers (that typically contain pasteable text).
@@ -155,42 +188,31 @@ map <F10> <Esc>:tabnew<CR>
 "This unsets the "last search pattern" register by hitting return
 nnoremap <CR> :noh<CR><CR>
 
-"map shift + F3 as 'copen'  to open  quickfix list
-"notice it is not working with map <S-F3 > but below one is working
-" <press ctrl-V><press shift+F<F3> and generate the code '[1;2R'>
-map [1;2R :copen<CR>
-map <F3> :vimgrep //g **/*.c
-
-nnoremap <F4> :buffers<CR>:buffer<Space>
-
-"Open new split panes to right and bottom, which feels more natural than Vim’s default:
-
-set splitbelow
-set splitright
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+"
+"set switchbuf+=usetab,newtab
 
-"Vim’s defaults are useful for changing split shapes:
+map <C-t><up> :tabr<cr>
+map <C-t><down> :tabl<cr>
+map <C-t><left> :tabp<cr>
+map <C-t><right> :tabn<cr>
 
-"Max out the height of the current split
-"ctrl + w _
+map ,l zfi{
 
-"Max out the width of the current split
-"ctrl + w |
+" Press * to search for the term under the cursor or a visual selection and
+" then press a key below to replace all instances of it in the current file.
+nnoremap <Leader>r :%s///g<Left><Left>
+nnoremap <Leader>rc :%s///gc<Left><Left><Left>
 
-"Normalize all split sizes, which is very handy when resizing terminal
-"ctrl + w =
-
-"Swap top/bottom or left/right split
-"Ctrl+W R
-
-"Break out current window into a new tabview
-"Ctrl+W T
-
-"Close every window in the current tabview but the current one
-"Ctrl+W o
+" The same as above but instead of acting on the whole file it will be
+" restricted to the previously visually selected range. You can do that by
+" pressing *, visually selecting the range you want it to apply to and then
+" press a key below to replace all instances of it in the current selection.
+xnoremap <Leader>r :s///g<Left><Left>
+xnoremap <Leader>rc :s///gc<Left><Left><Left>
 
 nmap <F8> :TagbarToggle<CR>
 
@@ -248,12 +270,21 @@ Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
 
 " Plugin outside ~/.vim/plugged with post-update hook
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'jremmen/vim-ripgrep'
+
+" Dim paragraphs above and below the active paragraph.
+Plug 'junegunn/limelight.vim'
+"
+" " Distraction free writing by removing UI elements and centering everything.
+Plug 'junegunn/goyo.vim'
+"
 
 " Unmanaged plugin (manually installed and updated)
 "Plug '~/my-prototype-plugin'
 
 "ctrlP
-Plug 'ctrlpvim/ctrlp.vim'
+"Plug 'ctrlpvim/ctrlp.vim'
 
 "It's easiest to explain with examples. Press cs"' inside
 "Hello world!" to change it to 'Hello world!'
@@ -279,21 +310,29 @@ Plug 'plasticboy/vim-markdown'
 Plug 'mileszs/ack.vim'
 
 Plug 'majutsushi/tagbar'
+Plug 'chrisbra/vim-commentary'
 
+Plug 'vim-scripts/c.vim'
 
+Plug 'godlygeek/tabular'
 
-" Dim paragraphs above and below the active paragraph.
-Plug 'junegunn/limelight.vim'
-"
-" " Distraction free writing by removing UI elements and centering everything.
-Plug 'junegunn/goyo.vim'
-"
+"Plug 'mphe/grayout.vim'
 
+Plug 'vim-scripts/ifdef.vim'
+" 
+"Plug 'ycm-core/YouCompleteMe'
+Plug 'morhetz/gruvbox'
+Plug 'jremmen/vim-ripgrep'
+Plug 'tpope/vim-fugitive'
+Plug 'leafgarland/typescript-vim'
+Plug 'vim-utils/vim-man'
+Plug 'lyuts/vim-rtags'
+"Plug 'git@github.com:kien/ctrlp.vim.git'
+Plug 'mbbill/undotree'
+Plug 'gnattishness/cscope_maps'
+Plug 'mphe/grayout.vim'
+"Plug 'preservim/nerdcommenter'
 
-
-"Plug 'godlygeek/tabular' | Plug 'tpope/vim-markdown'
-"Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
- 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 "
@@ -308,20 +347,34 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 
+" .............................................................................
+" junegunn/fzf.vim
+" .............................................................................
 
-" map for CtrlP
+let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
 
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+" Launch fzf with CTRL+P.
+nnoremap <silent> <C-p> :FZF -m<CR>
 
+" Map a few common things to do with FZF.
+nnoremap <silent> <Leader><Enter> :Buffers<CR>
+nnoremap <silent> <Leader>l :Lines<CR>
+" Allow passing optional flags into the Rg command.
+"   Example: :Rg myterm -g '*.md'
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \ "rg --column --line-number --no-heading --color=always --smart-case " .
+  \ <q-args>, 1, fzf#vim#with_preview(), <bang>0)
 
 "Provides highlighting for  #ifdef  #ifndef  #else  #endif  blocks, with the ability to mark a symbol as defined or undefined. 
 "Handles nesting of #ifdefs (and #if) as well, but does not handle  #if defined(). 
 "not workin now and  commented 
 "syntax=c.ifdef 
 
+let g:ackprg = "ag --vimgrep"
 
 
 set nolist
 
-"set path+=**
+let g:go_version_warning = 0
+
