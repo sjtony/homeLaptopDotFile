@@ -41,6 +41,7 @@ syntax on
 
 " For plug-ins to load correctly.
 filetype plugin indent on
+filetype plugin on
 
 " Turn off modelines
 set modelines=0
@@ -170,8 +171,9 @@ map <F7> <ESC>viw"qy<ESC>
 "onoremap <F7> <C-C>za
 "vnoremap <F7> zf
 
+imap <F9> <ESC>[sz=
 nmap <F8> :TagbarToggle<CR>
-map <F9> <Nop>
+"map <F9> <Nop>
 
 " window  tab 
 map <F10> <Esc>:tabnew<CR>
@@ -182,11 +184,12 @@ nmap <leader><F12> :set rnu! <CR>
 " List contents of all registers (that typically contain pasteable text).
 nnoremap <silent> "" :registers "0123456789abcdefghijklmnopqrstuvwxyz*+.<CR>
 
-map <F10> <Esc>:tabnew<CR>
+map <F10> <ESC:tabnew<CR>
 
 
 "This unsets the "last search pattern" register by hitting return
 nnoremap <CR> :noh<CR><CR>
+nnoremap <CR><CR> :noh<CR><CR>
 
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -229,6 +232,7 @@ au BufRead,BufNewFile *.py set expandtab nolist
 au BufRead,BufNewFile *.c set noexpandtab nolist
 au BufRead,BufNewFile *.h set noexpandtab nolist
 au BufRead,BufNewFile Makefile* set noexpandtab
+au BufRead,BufNewFile *.md set filetype=vimwiki
 
 packadd! matchit
 
@@ -299,7 +303,9 @@ Plug 'tpope/vim-surround'
 
 Plug 'vimwiki/vimwiki'
 
-" not in use now
+" not in use now, 
+" required to insall another SW, 
+" so inorder to preview, use vs  code 
 "Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 
 Plug 'godlygeek/tabular'
@@ -320,6 +326,7 @@ Plug 'godlygeek/tabular'
 
 Plug 'vim-scripts/ifdef.vim'
 " 
+"Plug 'valloric/youcompleteme'
 "Plug 'ycm-core/YouCompleteMe'
 Plug 'morhetz/gruvbox'
 Plug 'jremmen/vim-ripgrep'
@@ -334,6 +341,7 @@ Plug 'mphe/grayout.vim'
 "Plug 'preservim/nerdcommenter'
 
 " List ends here. Plugins become visible to Vim after this call.
+Plug 'neoclide/coc.nvim'
 call plug#end()
 "
 "
@@ -376,5 +384,20 @@ let g:ackprg = "ag --vimgrep"
 
 set nolist
 
-let g:go_version_warning = 0
+"vim instant-markdown - Instant Markdown previews from Vim
+" https://github.com/suan/vim-instant-markdown
+"let g:instant_markdown_autostart = 0  " disable autostart
+"map <leader>md :InstantMarkdownPreview<CR>
 
+" vimwiki - Personal Wiki for Vim
+" " https://github.com/vimwiki/vimwiki
+" set nocompatible
+" filetype plugin on
+" syntax on
+" " vimwiki with markdown support
+let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
+" " helppage -> :h vimwiki-syntax 
+"
+let g:vimwiki_list = [{'path': '~/dotFile/', 'syntax': 'markdown', 'ext': '.md'}]
+autocmd BufRead,BufNewFile *.wiki setlocal spell 
+autocmd BufRead,BufNewFile *.md setlocal spell 
